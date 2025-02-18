@@ -129,20 +129,22 @@ export const respondToInvitation = async (req: Request, res: Response) => {
 };
 
 
-
 export const getUserInvitations = async (req: Request, res: Response) => {
-    const userId = req?.user?._id;
-    console.log(1);
-    const invitations = await groupSchema.find({ invitations: userId })
-        .select("name description _id");
-    console.log(invitations);
+    try {
+        const userId = req?.user?._id;
+        const invitations = await groupSchema.find({ invitations: userId }).select("name description _id");
 
-    if (!invitations.length) {
-        res.status(200).send({ message: "No invitations found" });
+        if (!invitations.length) {
+            return res.status(200).send({ message: "No invitations found" }); // Add 'return' to prevent further execution
+        }
+
+        res.status(200).json({ invitations });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: "Internal server error" });
     }
-
-    res.status(200).json({ invitations });
 };
+
 export const approveRequest = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const admin = req.user as IUser;

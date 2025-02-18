@@ -9,13 +9,13 @@ const router = Router();
 
 router.get("/", groupController.getAllGroups);
 
-router.get("/admin/groups", verifyToken, groupController.getUserCreatedGroups);
+router.get("/my-groups", verifyToken, groupController.getUserCreatedGroups);
 
 router.post("/join", groupValidator.joinGroup, verifyToken, catchError, groupController.joinGroup);
 
 router.get("/invitations", verifyToken, catchError, groupController.getUserInvitations);
 
-router.post("/invitations/respond", groupValidator.respondInvitation, verifyToken, catchError, groupController.respondToInvitation);
+router.post("/respond-to-invitations", groupValidator.respondInvitation, verifyToken, catchError, groupController.respondToInvitation);
 
 
 router.post("/create", groupValidator.createGroup, verifyToken, groupController.createGroup);

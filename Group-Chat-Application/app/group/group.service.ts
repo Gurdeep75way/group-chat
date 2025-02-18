@@ -50,7 +50,6 @@ export const joinGroup = async (groupId: string, userId: mongoose.Types.ObjectId
 
 export const getUserCreatedGroups = async (adminId: string) => {
     const groups = await GroupSchema.find({ admin: adminId }).select("_id name description participants");
-
     if (!groups.length) {
         throw createHttpError(404, "You haven't created any groups");
     }

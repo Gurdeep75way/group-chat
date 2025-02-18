@@ -96,6 +96,7 @@ export default function LoginForm() {
                 <Box mb={1}>
                   <Typography color="#fff" fontSize="1.2rem" mb={1}>Email:</Typography>
                   <TextField
+                  style={{color:"black", background:"white"}}
                     fullWidth
                     type="text"
                     placeholder="Email"
@@ -116,6 +117,7 @@ export default function LoginForm() {
                   <Typography color="#fff" fontSize="1.2rem" mb={1}>Password:</Typography>
                   <PasswordInput
                     fullWidth
+                    style={{color:"black", background:"white"}}
                     type="password"
                     placeholder="Password"
                     label=""

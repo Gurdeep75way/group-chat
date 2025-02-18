@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { RootState } from "../store/store";
+import { User, Invitation, ApiResponse, IMessage, IGroup } from "../types";
 
 const baseUrl = import.meta.env.VITE_API_URL;
 
@@ -23,17 +24,23 @@ export const api = createApi({
     me: builder.query<ApiResponse<User>, void>({
       query: () => `/user/me`,
     }),
-    user: builder.query<ApiResponse<User>, void>({
-      query: () => `/user/:id`,
+    user: builder.query<ApiResponse<User>, { id: string }>({
+      query: ({ id }) => `/user/${id}`,
     }),
-    login: builder.mutation<ApiResponse<{ accessToken: string; refreshToken: string }>, { email: string; password: string }>({
+    login: builder.mutation<
+      ApiResponse<{ accessToken: string; refreshToken: string }>,
+      { email: string; password: string }
+    >({
       query: (body) => ({ url: `/user/login`, method: "POST", body }),
     }),
-    register: builder.mutation<ApiResponse<User>, Omit<User, "_id" | "active" | "role"> & { confirmPassword: string } & { groupsCreated?: string[]; groupsJoined?: string[] }>({
+    register: builder.mutation<
+      ApiResponse<User>,
+      Omit<User, "_id" | "active" | "role"> & { confirmPassword: string }
+    >({
       query: (body) => ({ url: `/user/register`, method: "POST", body }),
     }),
 
-    updateUser: builder.mutation<ApiResponse<User>, User>({
+    updateUser: builder.mutation<ApiResponse<User>, Partial<User>>({
       query: (body) => ({ url: `/user/`, method: "PUT", body }),
     }),
     logout: builder.mutation<void, void>({
@@ -45,12 +52,10 @@ export const api = createApi({
       query: () => "/groups/",
     }),
 
-    // Fetch groups created by the logged-in user (Admin)
     getUserCreatedGroups: builder.query<ApiResponse<IGroup[]>, void>({
-      query: () => "/groups/admin/groups",
+      query: () => "/groups/my-groups",
     }),
 
-    // Join a group
     joinGroup: builder.mutation<ApiResponse<void>, { groupId: string }>({
       query: (body) => ({
         url: "/groups/join",
@@ -59,22 +64,25 @@ export const api = createApi({
       }),
     }),
 
-    // Get user's invitations
     getUserInvitations: builder.query<ApiResponse<Invitation[]>, void>({
       query: () => "/groups/invitations",
     }),
 
-    // Respond to an invitation
-    respondInvitation: builder.mutation<ApiResponse<void>, { groupId: string; action: "accept" | "reject" }>({
+    respondInvitation: builder.mutation<
+      ApiResponse<void>,
+      { groupId: string; action: "accept" | "reject" }
+    >({
       query: (body) => ({
-        url: "/groups/invitations/respond",
+        url: "/groups/respond-to-invitations",
         method: "POST",
         body,
       }),
     }),
 
-    // Create a group (Updated route)
-    createGroup: builder.mutation<ApiResponse<IGroup>, { name: string; isPublic?: boolean }>({
+    createGroup: builder.mutation<
+      ApiResponse<IGroup>,
+      { name: string; isPublic?: boolean }
+    >({
       query: (body) => ({
         url: "/groups/create",
         method: "POST",
@@ -82,8 +90,10 @@ export const api = createApi({
       }),
     }),
 
-    // Invite a user to a group
-    inviteUser: builder.mutation<ApiResponse<void>, { groupId: string; userId: string }>({
+    inviteUser: builder.mutation<
+      ApiResponse<void>,
+      { groupId: string; userId: string }
+    >({
       query: (body) => ({
         url: "/groups/invite",
         method: "POST",
@@ -91,8 +101,10 @@ export const api = createApi({
       }),
     }),
 
-    // Approve a user's request to join
-    approveRequest: builder.mutation<ApiResponse<void>, { groupId: string; userId: string }>({
+    approveRequest: builder.mutation<
+      ApiResponse<void>,
+      { groupId: string; userId: string }
+    >({
       query: (body) => ({
         url: "/groups/approve",
         method: "POST",
@@ -100,8 +112,10 @@ export const api = createApi({
       }),
     }),
 
-    // Reject a user's request to join
-    rejectRequest: builder.mutation<ApiResponse<void>, { groupId: string; userId: string }>({
+    rejectRequest: builder.mutation<
+      ApiResponse<void>,
+      { groupId: string; userId: string }
+    >({
       query: (body) => ({
         url: "/groups/reject",
         method: "POST",
@@ -109,13 +123,14 @@ export const api = createApi({
       }),
     }),
 
-    // Fetch group details by ID
     getGroupById: builder.query<ApiResponse<IGroup>, { groupId: string }>({
       query: ({ groupId }) => `/groups/${groupId}`,
     }),
 
-    // Update a group (newly added)
-    updateGroup: builder.mutation<ApiResponse<IGroup>, { groupId: string; data: Partial<IGroup> }>({
+    updateGroup: builder.mutation<
+      ApiResponse<IGroup>,
+      { groupId: string; data: Partial<IGroup> }
+    >({
       query: ({ groupId, data }) => ({
         url: `/groups/${groupId}`,
         method: "PUT",
@@ -123,7 +138,6 @@ export const api = createApi({
       }),
     }),
 
-    // Delete a group (newly added)
     deleteGroup: builder.mutation<ApiResponse<void>, { groupId: string }>({
       query: ({ groupId }) => ({
         url: `/groups/${groupId}`,
@@ -132,7 +146,10 @@ export const api = createApi({
     }),
 
     // Message API
-    sendMessage: builder.mutation<ApiResponse<void>, { content: string; groupId?: string; userId?: string }>({
+    sendMessage: builder.mutation<
+      ApiResponse<void>,
+      { content: string; groupId?: string; userId?: string }
+    >({
       query: (body) => ({ url: `/message/`, method: "POST", body }),
     }),
     getMessagesForUser: builder.query<ApiResponse<IMessage[]>, { userId: string }>({
@@ -162,6 +179,8 @@ export const {
   useApproveRequestMutation,
   useRejectRequestMutation,
   useGetGroupByIdQuery,
+  useUpdateGroupMutation,
+  useDeleteGroupMutation,
   useSendMessageMutation,
   useGetMessagesForUserQuery,
   useGetMessagesForGroupQuery,

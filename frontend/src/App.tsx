@@ -8,13 +8,23 @@ import Register from "./pages/register";
 import ContactUs from "./pages/contact";
 import PrivacyPolicy from "./pages/policy";
 import NotFound from "./pages/notfound";
-
+// import Users from "./pages/Users.tsx";
+import GroupsCreated from "./pages/GroupsCreated.tsx";
+import GroupsJoined from "./pages/GroupsJoined.tsx";
+import Invitations from "./pages/Invitations.tsx";
+import GroupChatApp from "./pages/GroupChat.tsx";
 function App() {
   return (
     <Routes>
       <Route element={<AuthanticatedLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/profile" element={<Profile />} />
+        {/* <Route path="/users" element={<Users />} /> */}
+
+        <Route path="/my-groups" element={<GroupsCreated />} />
+        <Route path="/groups" element={<GroupChatApp />} />
+        <Route path="/groups-joined" element={<GroupsJoined />} />
+        <Route path="/invitations" element={<Invitations />} />
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/policy" element={<PrivacyPolicy />} />
       </Route>
@@ -22,8 +32,6 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Route>
-
-      {/* 404 Not Found route */}
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
