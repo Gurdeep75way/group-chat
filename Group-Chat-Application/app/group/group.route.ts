@@ -20,17 +20,17 @@ router.post("/respond-to-invitations", groupValidator.respondInvitation, verifyT
 
 router.post("/create", groupValidator.createGroup, verifyToken, groupController.createGroup);
 
-router.post("/invite", verifyToken, isGroupAdmin, groupValidator.inviteUser, catchError, groupController.inviteUser);
+router.post("/invite", verifyToken, groupValidator.inviteUser, catchError, groupController.inviteUser);
 
-router.post("/approve", verifyToken, isGroupAdmin, groupValidator.approveRequest, catchError, groupController.approveRequest);
+router.post("/approve", verifyToken, groupValidator.approveRequest, catchError, groupController.approveRequest);
 
-router.post("/reject", verifyToken, isGroupAdmin, groupValidator.approveRequest, catchError, groupController.rejectRequest);
+router.post("/reject", verifyToken, groupValidator.approveRequest, catchError, groupController.rejectRequest);
 
 
-router.get("/:id", verifyToken, isGroupAdmin, groupController.getGroupById);
+router.get("/:id", verifyToken, groupController.getGroupById);
 
-router.put("/:id", verifyToken, isGroupAdmin, groupController.updateGroup);
+router.put("/:id", verifyToken, groupController.updateGroup);
 
-router.delete("/:id", verifyToken, isGroupAdmin, groupController.deleteGroup);
+router.delete("/:id", verifyToken, groupController.deleteGroup);
 
 export default router;

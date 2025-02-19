@@ -4,9 +4,12 @@ import asyncHandler from "express-async-handler";
 import { type Request, type Response } from "express";
 
 export const sendMessage = asyncHandler(async (req: Request, res: Response) => {
+    console.log("Received request in controller:", req.body);
     const result = await messageService.sendMessage(req.body);
+    console.log("Message saved in DB:", result);
     res.send(createResponse(result, "Message sent successfully"));
 });
+
 
 export const getMessagesForUser = asyncHandler(async (req: Request, res: Response) => {
     const result = await messageService.getMessagesForUser(req.params.userId);

@@ -53,7 +53,7 @@ const Home = () => {
       >
         <Button
           component={Link}
-          to="/chat"
+          to="/users"
           variant="contained"
           sx={{
             mt: 4,

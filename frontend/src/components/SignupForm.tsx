@@ -108,7 +108,7 @@ export default function SignupForm() {
     try {
       await registerUser(data).unwrap();
       toast.success("User registered successfully!");
-      navigate("/");
+      navigate("/login");
     } catch (error: any) {
       const validationError = error?.data?.data?.errors?.[0].msg;
       toast.error(

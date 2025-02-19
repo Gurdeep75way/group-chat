@@ -77,7 +77,7 @@ export const isGroupAdmin = async (req: Request, res: Response, next: NextFuncti
     if (group.admin.toString() !== userId?.toString()) {
       return res.status(403).json({ message: "You are not the admin of this group" });
     }
-
+    console.log(2);
     next();
   } catch (error) {
     return res.status(500).json({ message: "Internal server error", error });
@@ -99,6 +99,7 @@ export const verifyToken = async (req: AuthRequest, res: Response, next: NextFun
         res.status(401).send({ message: "Error occurred" })
       }
       req.user = decode;
+      console.log(1);
       next();
     }
   } catch (error) {

@@ -27,12 +27,12 @@ export const createGroup = async (req: Request, res: Response, next: NextFunctio
 
 export const getGroupById = async (req: Request, res: Response, next: NextFunction) => {
     try {
+        // console.log("hello");
         const user = req.user as IUser;
-        if (!user || !user._id) {
-            throw createHttpError(401, "Unauthorized: User not found");
-        }
-
+        console.log("Hello")
         const { id } = req.params;
+        console.log(user);
+        console.log(id);
         const group = await groupService.getGroupById(id, user._id.toString());
         res.status(200).json(group);
     } catch (error) {
@@ -132,16 +132,31 @@ export const respondToInvitation = async (req: Request, res: Response) => {
 export const getUserInvitations = async (req: Request, res: Response) => {
     try {
         const userId = req?.user?._id;
-        const invitations = await groupSchema.find({ invitations: userId }).select("name description _id");
-
-        if (!invitations.length) {
-            return res.status(200).send({ message: "No invitations found" }); // Add 'return' to prevent further execution
+        if (!userId) {
+            return res.status(400).json({ message: "Unauthorized request" });
         }
 
-        res.status(200).json({ invitations });
+        const invitations = await groupSchema
+            .find({ invitations: { $in: [userId] } })
+            .populate("admin", "_id") // Populate the admin (sender)
+            .select("name _id admin");
+
+        if (!invitations.length) {
+            return res.status(200).json({ message: "No invitations found", data: [] });
+        }
+
+        const formattedInvitations = invitations.map((group) => ({
+            _id: group._id,
+            groupId: group._id,
+            senderId: group.admin?._id, // Admin is the sender
+            receiverId: userId, // Current user is the receiver
+            status: "pending" // Default status
+        }));
+
+        res.status(200).json({ data: formattedInvitations });
     } catch (error) {
         console.error(error);
-        res.status(500).send({ message: "Internal server error" });
+        res.status(500).json({ message: "Internal server error" });
     }
 };
 

@@ -38,6 +38,7 @@ export default function Navbar() {
   const handleLogout = () => {
     logoutUser();
     handleMenuClose();
+    navigate("/login");
   };
 
   const handleDrawerToggle = () => {
@@ -86,17 +87,18 @@ export default function Navbar() {
           <Box sx={{ display: { xs: "none", md: "flex" }, gap: 3 }}>
             {isAuthenticated ? (
               <>
-                <NavLink to="/">Dashboard</NavLink>
-                <NavLink to="/chat">Messages</NavLink>
-                <NavLink to="/groups">My Communities</NavLink>
-                <NavLink to="/discover">Explore Groups</NavLink>
-                <NavLink to="/invites">Invites</NavLink>
+                <NavLink to="/">Home</NavLink>
+                <NavLink to="/profile">Profile</NavLink>
+                <NavLink to="/users">Users</NavLink>
+                <NavLink to="/groups">Groups</NavLink>
+                <NavLink to="/invitations">Invitations</NavLink>
+                <NavLink to="/contact-us">Contact</NavLink>
+                <NavLink to="/policy">Policy</NavLink>
               </>
             ) : (
               <>
-                <NavLink to="/">Home</NavLink>
-                <NavLink to="/login">Sign In</NavLink>
-                <NavLink to="/register">Join Now</NavLink>
+                <NavLink to="/login">Login</NavLink>
+                <NavLink to="/register">Register</NavLink>
               </>
             )}
           </Box>
@@ -120,7 +122,7 @@ export default function Navbar() {
                   },
                 }}
               >
-                <MenuItem
+                {/* <MenuItem
                   component={Link}
                   to="/profile"
                   sx={{
@@ -128,7 +130,7 @@ export default function Navbar() {
                   }}
                 >
                   Profile
-                </MenuItem>
+                </MenuItem> */}
                 <Divider />
                 <MenuItem
                   onClick={handleLogout}
@@ -160,22 +162,22 @@ export default function Navbar() {
         <List>
           {isAuthenticated ? (
             <>
-              <MobileNavItem to="/">Dashboard</MobileNavItem>
-              <MobileNavItem to="/chat">Messages</MobileNavItem>
-              <MobileNavItem to="/groups">My Communities</MobileNavItem>
-              <MobileNavItem to="/discover">Explore Groups</MobileNavItem>
-              <MobileNavItem to="/invites">Invites</MobileNavItem>
-              <Divider sx={{ bgcolor: "#FFD700" }} />
+              <MobileNavItem to="/">Home</MobileNavItem>
               <MobileNavItem to="/profile">Profile</MobileNavItem>
+              <MobileNavItem to="/users">Users</MobileNavItem>
+              <MobileNavItem to="/groups">Groups</MobileNavItem>
+              <MobileNavItem to="/invitations">Invitations</MobileNavItem>
+              <MobileNavItem to="/contact-us">Contact</MobileNavItem>
+              <MobileNavItem to="/policy">Policy</MobileNavItem>
+              <Divider sx={{ bgcolor: "#FFD700" }} />
               <ListItem button onClick={handleLogout}>
                 <ListItemText primary="Logout" sx={{ textAlign: "center", "&:hover": { color: "#FFD700" } }} />
               </ListItem>
             </>
           ) : (
             <>
-              <MobileNavItem to="/">Home</MobileNavItem>
-              <MobileNavItem to="/login">Sign In</MobileNavItem>
-              <MobileNavItem to="/register">Join Now</MobileNavItem>
+              <MobileNavItem to="/login">Login</MobileNavItem>
+              <MobileNavItem to="/register">Register</MobileNavItem>
             </>
           )}
         </List>

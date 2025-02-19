@@ -52,9 +52,10 @@ export const api = createApi({
       query: () => "/groups/",
     }),
 
-    getUserCreatedGroups: builder.query<ApiResponse<IGroup[]>, void>({
+    getUserCreatedGroups: builder.query<{ groups: IGroup[] }, void>({
       query: () => "/groups/my-groups",
     }),
+
 
     joinGroup: builder.mutation<ApiResponse<void>, { groupId: string }>({
       query: (body) => ({
@@ -123,8 +124,8 @@ export const api = createApi({
       }),
     }),
 
-    getGroupById: builder.query<ApiResponse<IGroup>, { groupId: string }>({
-      query: ({ groupId }) => `/groups/${groupId}`,
+    getGroupById: builder.query<ApiResponse<IGroup>, { _id: string }>({
+      query: ({ _id }) => `/groups/${_id}`,
     }),
 
     updateGroup: builder.mutation<
@@ -148,15 +149,15 @@ export const api = createApi({
     // Message API
     sendMessage: builder.mutation<
       ApiResponse<void>,
-      { content: string; groupId?: string; userId?: string }
+      { content: string; group?: string; recipient?: string; sender?: string; }
     >({
       query: (body) => ({ url: `/message/`, method: "POST", body }),
     }),
-    getMessagesForUser: builder.query<ApiResponse<IMessage[]>, { userId: string }>({
-      query: ({ userId }) => `/message/user/${userId}`,
+    getMessagesForUser: builder.query<ApiResponse<IMessage[]>, { recipient: string }>({
+      query: ({ recipient }) => `/message/user/${recipient}`,
     }),
-    getMessagesForGroup: builder.query<ApiResponse<IMessage[]>, { groupId: string }>({
-      query: ({ groupId }) => `/message/group/${groupId}`,
+    getMessagesForGroup: builder.query<ApiResponse<IMessage[]>, { group: string }>({
+      query: ({ group }) => `/message/group/${group}`,
     }),
   }),
 });
@@ -169,6 +170,8 @@ export const {
   useRegisterMutation,
   useUpdateUserMutation,
   useLogoutMutation,
+
+
   useGetAllGroupsQuery,
   useGetUserCreatedGroupsQuery,
   useJoinGroupMutation,

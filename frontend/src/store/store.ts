@@ -2,10 +2,13 @@ import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "react-redux";
 import authReducer from "./reducers/authReducer";
 import { api } from "../services/api";
-
+import groupReducer from "./reducers/groupSlice";
+import userReducer from "./reducers/userSlice";
 export const store = configureStore({
   reducer: {
     auth: authReducer,
+    group: groupReducer,
+    user: userReducer,
     [api.reducerPath]: api.reducer,
   },
   middleware: (getDefaultMiddleware) =>
